@@ -9,7 +9,7 @@ type Appendable = VerbalExpression | RegExp | string | number;
 interface VerbalExpression extends RegExp {
     // Utility //
     /** Sanitation function for adding anything safely to the expression */
-    sanitize(value: Appendable): VerbalExpression;
+    sanitize(value: Appendable): string;
     /** Append literal expression to the object. Also refreshes the expression. */
     add(value: string | number): VerbalExpression;
 
