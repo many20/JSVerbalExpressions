@@ -137,6 +137,58 @@ test('or', (t) => {
     resetLastIndex(testRegex);
     testString = 'xyzabc';
     t.false(testRegex.test(testString));
+
+    testRegex = VerEx().then('abc').endOfLine().or().startOfLine().then('def');
+    testString = 'defzzz';
+    t.true(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'abczzz';
+    t.false(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'zzzabc';
+    t.true(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'zzzdef';
+    t.false(testRegex.test(testString));
+
+    testRegex = VerEx().then('111').startOfLine().or('222').startOfLine().or('333').startOfLine().or('444').endOfLine();
+    testString = '111zzz';
+    t.true(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = '222zzz';
+    t.true(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'zzz444';
+    t.true(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'zzz111';
+    t.false(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'zzz222';
+    t.false(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = 'zzz333';
+    t.false(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = '444zzz';
+    t.false(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = '111444';
+    t.true(testRegex.test(testString));
+
+    resetLastIndex(testRegex);
+    testString = '444111';
+    t.false(testRegex.test(testString));
 });
 
 test('anything', (t) => {

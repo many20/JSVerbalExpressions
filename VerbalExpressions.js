@@ -28,6 +28,8 @@ class VerbalExpression extends RegExp {
         this._source = '';
         this._suffixes = '';
         this._modifiers = 'gm'; // 'global, multiline' matching by default
+
+        this._sourceList = [];
     }
 
     // Utility //
@@ -67,7 +69,24 @@ class VerbalExpression extends RegExp {
      */
     add(value = '') {
         this._source += value;
-        const pattern = this._prefixes + this._source + this._suffixes;
+
+        const sourcesFromSourceOrList = this._sourceList.length > 0 ? `${this._sourceList.join('|')}|` : '';
+
+        const pattern = `${sourcesFromSourceOrList}${this._prefixes}${this._source}${this._suffixes}`;
+
+        this.compile(pattern, this._modifiers);
+
+        return this;
+    }
+
+    _addToSourceList() {
+        const pattern = `${this._prefixes}${this._source}${this._suffixes}`;
+
+        this._sourceList.push(pattern);
+
+        this._prefixes = '';
+        this._suffixes = '';
+        this._source = '';
 
         this.compile(pattern, this._modifiers);
 
@@ -140,7 +159,7 @@ class VerbalExpression extends RegExp {
         this._prefixes += '(?:';
         this._suffixes = `)${this._suffixes}`;
 
-        this.add(')|(?:');
+        this._addToSourceList();
 
         if (value) {
             this.then(value);
